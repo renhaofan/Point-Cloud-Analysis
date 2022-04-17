@@ -21,6 +21,15 @@ optional arguments:
 Below are the normal estimation difference between my implementation and official implementattion on `car/train/car_0001` in ModelNet40 dataset.
 ![my_pca_normal](./img/my_pca_normal.png)
 ![official_normal](./img/official_normal.png)
+![tyre](./img/car_local_magnification.png)
+
+`chair/train/chair_0003`
+![chair_my_pca_normal](./img/chair3_normal_pca.png)
+![chair_official_normal](./img/chair3_normal_official.png)
+![chair3](./img/chair3_mesh.png)
+
+
+
 
 ## voxel filter
 This implementation apply centroid in the same voxel as the result.
