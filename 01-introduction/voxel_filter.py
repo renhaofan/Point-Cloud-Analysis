@@ -4,7 +4,10 @@
 Created on Wed Apr 14 16:05:44 2021
 
 @author: steve
-@description: implemente the voxel filter for point clouds
+@description: implemente the voxel filter for point clouds 
+@TO DO: 1. different method to select points from a voxel
+        2. hash table
+        3. visualize the voxel
 """
 
 
@@ -97,31 +100,50 @@ def main(point_cloud_filename, voxel_size):
     # read point cloud from file
     point_cloud_o3d = o3d.io.read_point_cloud(point_cloud_filename)
     points_ndarray = np.asarray(point_cloud_o3d.points)
-    print('------------------------------------' + \
-          '------------------------------------')
+    print('--------------------------------' + \
+          '--------------------------------')
     print(f'Path: {point_cloud_filename}')
     print('Model name:', point_cloud_filename.split('/')[-1])
     print(f'Total number of points: {points_ndarray.shape[0]}')
     print(f'Voxel size: {voxel_size}')
-    print('------------------------------------' + \
-          '------------------------------------')
-    # voxel filter
+    print('--------------------------------' + \
+          '--------------------------------')
+
+    # my voxel filter
     filtered_points_o3d = o3d.geometry.PointCloud()
     filtered_points = my_voxel_filter(point_cloud_o3d, voxel_size)
     filtered_points_o3d.points = o3d.utility.Vector3dVector(filtered_points)
     
+    # official voxel filter
+    official_filtered_o3d = point_cloud_o3d.voxel_down_sample(
+                            voxel_size=voxel_size)
+    official_filtered_points = np.asarray(official_filtered_o3d.points)
+    print('--------------------------------' + \
+          '--------------------------------')
+    print('Number of points after official voxel filter:', \
+                  official_filtered_points.shape[0])
+    print('--------------------------------' + \
+          '--------------------------------')
+    print('centroid difference between mine and offical methods')
+    print(np.sum(filtered_points_o3d.get_center() - 
+                 official_filtered_o3d.get_center()))
+
     
     # visualization for comparision
     distance = filtered_points - np.mean(filtered_points, axis=0)
     radius = [np.linalg.norm(distance[i]) \
               for i in np.arange(distance.shape[0])]
     max_radius = np.max(radius)
-    filtered_points_o3d.translate([max_radius, 0, 0])
-    # yellow
-    point_cloud_o3d.paint_uniform_color([1, 1, 0])
-    # cyan
-    filtered_points_o3d.paint_uniform_color([0, 1, 1])
-    o3d.visualization.draw_geometries([point_cloud_o3d, filtered_points_o3d])
+    filtered_points_o3d.translate([max_radius, max_radius, 0])
+    official_filtered_o3d.translate([-max_radius, max_radius, 0])
+    # red
+    point_cloud_o3d.paint_uniform_color([1, 0, 0])
+    # green
+    filtered_points_o3d.paint_uniform_color([0, 1, 0])
+    # blue
+    official_filtered_o3d.paint_uniform_color([0, 0, 1])
+    o3d.visualization.draw_geometries([point_cloud_o3d, filtered_points_o3d, 
+                                       official_filtered_o3d])
 
 def get_arguments():
     """

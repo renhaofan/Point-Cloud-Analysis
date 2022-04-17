@@ -262,7 +262,8 @@ def my_estimate_normals(point_cloud_filename):
     point_cloud_o3d.paint_uniform_color([1, 1, 0])
     o3d.visualization.draw_geometries([point_cloud_o3d, \
                                       pca_o3d], \
-                                      point_show_normal=True)
+                                      point_show_normal=True, \
+                                      window_name='My PCA normal estimation')
     
     # generate surface normal lineset
     # surface_normals_o3d = get_surface_normal_geometry_structure \
@@ -281,8 +282,10 @@ def offical_estimate_normals(point_cloud_filename):
     point_cloud_o3d = o3d.io.read_point_cloud(point_cloud_filename)
     point_cloud_o3d.estimate_normals(
         search_param=o3d.geometry.KDTreeSearchParamKNN(5))
+    point_cloud_o3d.paint_uniform_color([1, 1, 0])
     o3d.visualization.draw_geometries([point_cloud_o3d],
-                                      point_show_normal=True)
+                                      point_show_normal=True, \
+                                      window_name='Official normal estimation')
 
 
 def get_arguments():
