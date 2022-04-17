@@ -2,10 +2,11 @@
 point clouds normal estimation and voxel filter to remove outlier.
 ---
 # TO DO
-* analysis time
+* reason for normal estimation difference
+* pseudo color rendering for normal vectors
 * visualize the voxel
 * hash table for voxel filter
-
+* analysis time
 # PCA_Normal_Estimation
 ```
 python pca_normal.py -h
